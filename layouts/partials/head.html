@@ -1,0 +1,304 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fluidbox/2.0.5/js/jquery.fluidbox.min.js" integrity="sha512-0kQqdmb3fpKtRwrbCZDlmiwuZgDyPAOLDOu/HyAt4py7lAVDXKknqtqS6dFNV8U8JrHZymQxlO9SFPZ2u8dhMw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://kit.fontawesome.com/440832e592.js" crossorigin="anonymous"></script>
+<script src="{{ .Site.BaseURL }}js/code-buttons.js"></script>
+<style>
+    body {
+        font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+        -webkit-font-smoothing: auto;
+        line-height: 1.5;
+    }
+
+    .heading .heading-link {
+        visibility: hidden;
+        font-size: 1.2rem;
+    }
+
+    .heading:hover .heading-link {
+        visibility: visible;
+    }
+    .heading .heading-link a {
+        text-decoration: none;
+    }
+    .heading .heading-link a:visited {
+        color: #0000FF;
+    }
+
+
+    #title {
+        margin-top: 6em;
+        margin-left: 5%;
+        font-size: 1.3em;
+    }
+
+
+    @media only screen {
+        main {
+          display: grid;
+          grid-template-columns: 15em 1fr;
+          margin: 0 auto 0 auto;
+        }
+        img {
+            max-width: 60vw;
+        }
+        #content {
+            max-width: 70vw;
+        }
+
+        #title {
+            grid-column: span 2;
+        }
+
+        #toc-box-float {
+            position: relative;
+            height: auto;
+            grid-column-start: 1;
+        }
+        #toc-box {
+            width: 15em;
+            background-color: #FFFFFF;
+            position: sticky;
+            top: 5vh;
+            align-self: start;
+            margin-right: 1em;
+            height: 90vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            padding-right: 1em;
+            font-size: .8em;
+        }
+ 
+        .code-expanded .highlight {
+            position: fixed;
+            z-index: 800;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            margin: 0 !important;
+            display: flex;
+        }
+        .code-expanded .highlight>:first-child {
+            width: 100vw !important;
+            height: auto !important;
+            margin: 0 1em 0 0 !important;
+            padding-top: 3em;
+        }
+        .code-expanded .codeblock-tools {
+            z-index: 801;
+            position: fixed;
+            flex-direction: row;
+            top: 0;
+            left: 0;
+            opacity: 100% !important;
+        }
+        .code-expanded .codeblock-tools button {
+            opacity: 100% !important;
+        }
+
+        .highlight>:first-child {
+            width: 60vw;
+        }
+
+    }
+    #toc-toggle {
+        display: none;
+    }
+
+
+    @media only screen and (max-width: 900px) {
+        main {
+            display: block;
+        }
+        img {
+            max-width: 80vw;
+        }
+        #toc-box {
+            box-shadow: 0em 0.2em 1em #AAAAAA;
+            border-radius: 0 3px 3px 0;
+        }
+
+        #toc-box-float {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transition: left 0.5s;
+            height: 100vh;
+            z-index:700;
+        }
+
+        .sidebar-hidden {
+            left: -13em !important;
+            transition: left 0.5s;
+        }
+
+        #title {
+            margin-left: 2.5em;
+        }
+        #content {
+            margin-left: 2.5em;
+            max-width: 90vw;
+        }
+
+        #toc-toggle {
+            display: block;
+            top: 3em;
+            margin-left: 100%;
+            height: 2em;
+            width: 2em;
+            position: absolute;
+            border: 0;
+            background-color: #BBBBBB;
+            border-radius: .35em;
+            transition: top 0.5s;
+        }
+        #toc-toggle:hover {
+            background-color: #999999;
+        }
+        #toc-toggle:active {
+            background-color: #888888;
+        }
+
+        .sidebar-hidden #toc-toggle {
+            top: .75em !important;
+            transition: top 0.5s;
+        }
+        .highlight>:first-child {
+            width: 80vw;
+        }
+
+    }
+
+    #toc-box nav a {
+        color: #555555;
+        text-decoration: none;
+    }
+
+    @media only screen {
+        #toc-box nav ul {
+            padding-left: 0;
+            margin-bottom: 1em;
+            list-style-type: none;
+
+            overflow-y: clip;
+            max-height: 100vh;
+            transition: max-height 0.3s ease-in;
+        }
+
+        #toc-box nav ul li {
+            border-left: .15em solid #DDDDDD;
+            margin-left: .5em;
+            padding-left: .5em;
+            margin-bottom: 0.5em;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        #toc-box nav .active {
+            border-left: .15em solid #000000;
+        }
+
+        .toc-collapsed {
+            max-height: 0vh !important;
+            transition: max-height 0.3s ease-in;
+        }
+    }
+
+    img {
+        margin: 0 2em 0 2em;
+        box-shadow: 0em .2em 1em #AAAAAA;
+        border-radius: 3px;
+    }
+
+    .codeblock {
+        display: flex;
+    }
+
+
+    .codeblock-tools {
+        display: flex;
+        flex-direction: column;
+        padding-top: .75em;
+        padding-left: .75em;
+    }
+
+    .codeblock .code-button {
+        opacity: 0%;
+        transition: opacity 0.15s ease-in-out;
+    }
+
+    .codeblock:hover .code-button {
+        opacity: 100%;
+    }
+
+    .code-button {
+        height: 2em;
+        width: 2em;
+
+        color: #272822;
+        background-color: #F2F2F2;
+        border: 0;
+        border-radius: 3px;
+
+        margin: .3em;
+        padding: 3px 8px;
+        font-size: 0.8em;
+    }
+
+    .code-button:hover {
+        cursor: pointer;
+        background-color: #E6E6E6;
+    }
+
+    .code-button:focus {
+        /* Avoid an ugly focus outline on click in Chrome,
+           but darken the button for accessibility.
+           See https://stackoverflow.com/a/25298082/1481479 */
+        background-color: #D9D9D9;
+        outline: 0;
+    }
+
+    .code-button:active {
+        background-color: #C9C9C9;
+    }
+
+
+    /* TODO: word wrap on print: */
+    .highlight {
+        margin-left: 1em;
+        font-size: 1.2em;
+    }
+    .highlight>:first-child {
+        padding: 1em;
+        overflow-x: auto;
+        border-radius: .5em;
+    }
+    .highlight>div {
+        padding-left: 0 !important;
+    }
+    .highlight table td:first-child pre {
+        border-right: 1px #888888 solid;
+        margin-right: 1em;
+        padding-left: 1.5em;
+
+    }
+    .highlight table td:first-child {
+        position: sticky;
+        left: 0;
+    }
+
+    :not(pre) > code {
+        background-color: #272822;
+        color: #ffffff;
+        border-radius: .5em;
+        padding: .25em .5em .25em .5em;
+        white-space: nowrap; 
+    }
+
+
+    .aside {
+        background-color: #EEEEEE;
+        padding: 1em;
+        border-radius: .5em;
+    }
+</style>

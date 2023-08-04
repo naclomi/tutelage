@@ -1,0 +1,21 @@
+{{- $options := .Options -}}
+{{- $data := newScratch -}}
+{{- $data.Set "options" dict -}}
+{{- range $key, $value := $options -}}
+  {{- $data.SetInMap "options" (lower $key) $value -}}
+{{- end -}}
+{{- $linecount := len (split .Inner "\n" ) -}}
+{{- if lt $linecount (default 4 site.Params.lineNoMinThreshold ) -}}
+  {{- $data.SetInMap "options" "lineNos" "false" -}}
+{{- end -}}
+{{- $blockid := .Ordinal -}}
+{{- $replacement := (printf "%s%s" "code" $blockid) -}}
+{{- $data.SetInMap "options" "lineanchors" $replacement -}}
+
+<div class="codeblock" id="codeblock-{{ $blockid }}">
+{{- highlight .Inner .Type ($data.Get "options") -}}
+  <div class="codeblock-tools">
+    <button class='code-button' type='button' onclick='codeCopy("codeblock-{{- $blockid -}}")'><i class="fa-solid fa-copy"></i></button>
+    <button class='code-button' type='button' onclick='codeExpand("codeblock-{{- $blockid -}}")'><i class="fa-solid fa-maximize"></i></button>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    {{- partial "head.html" . -}}
+    <body>
+        <main>
+            {{- partial "header.html" . -}}
+            <div id="title"><h1>{{- page.Title -}}</h1></div>
+            <div id="toc-box-float">
+                <button id="toc-toggle" type="button"><i id="toc-toggle-icon" class="fa-solid fa-list"></i></button>
+                <div id="toc-box">{{ .TableOfContents }}</div>
+            </div>
+            <div id="content">
+                {{- block "main" . }}{{- end }}
+            </div>
+            {{- partial "footer.html" . -}}
+        </main>
+    </body>
+</html>

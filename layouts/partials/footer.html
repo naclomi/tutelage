@@ -1,0 +1,116 @@
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+
+    let all_headings = Array.from(document.getElementsByClassName("heading"));
+    all_headings.sort((a,b) => {
+        return a.getBoundingClientRect().y > b.getBoundingClientRect().y;
+    })
+    let active_sections = Array(6);
+    for (let heading of all_headings) {
+        const heading_level = Number(heading.getAttribute('aria-level')) - 1;
+        for (let level = heading_level; level < 6;  level++){
+            if (active_sections[level] != null) {
+                active_sections[level].dataset.ending = heading.getAttribute('id');
+                active_sections[level] = null;
+            }
+        }
+        active_sections[heading_level] = heading;
+    }
+
+    for (let heading of all_headings) {
+        let section = document.createElement("section");
+        let cursor = heading.nextSibling;
+        heading.parentNode.replaceChild(section, heading);
+        section.appendChild(heading);
+        section.setAttribute('id', heading.getAttribute('id'));
+        section.dataset.level = heading.getAttribute('aria-level');
+        heading.removeAttribute('id');
+        document.querySelector(`nav li a[href="#${section.getAttribute('id')}"]`).parentElement.dataset.targetLevel = section.dataset.level;
+        while (cursor != null && !(cursor.nodeType == 1 && cursor.getAttribute('id') == heading.dataset.ending)){
+            let next_cursor = cursor.nextSibling;
+            section.appendChild(cursor);
+            cursor = next_cursor;
+        }
+    }
+
+    function collapseTableOfContents() {
+        const toc = document.getElementById("toc-box");
+        const allSections = Array.from(toc.getElementsByTagName("ul"));
+        for (let section of allSections) {
+            let activeChildren = section.getElementsByClassName("active");
+            if (section.parentElement.classList.contains("active") || activeChildren.length > 0) {
+                section.classList.remove('toc-collapsed');
+            } else {
+                section.classList.add('toc-collapsed');
+            }
+        }
+    }
+
+    function scrollTableOfContents() {
+        const toc = document.getElementById("toc-box");
+        const allActive = Array.from(toc.getElementsByClassName("active"));
+
+        const deepestLevel = Math.max.apply(null, allActive.map((v)=>{return Number(v.dataset.targetLevel)}))
+        const deepestActive = allActive.filter((v)=>{return Number(v.dataset.targetLevel) == deepestLevel});
+        let targetY = 0;
+        for (let elem of deepestActive) {
+            targetY += elem.offsetTop;
+        }
+        targetY /= deepestActive.length;
+        toc.scrollTop = targetY - (toc.offsetHeight/2);
+    }
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            const id = entry.target.getAttribute('id');
+            if (entry.intersectionRatio > 0) {
+                let active_elem = document.querySelector(`nav li a[href="#${id}"]`).parentElement
+                active_elem.classList.add('active');
+            } else {
+                document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.remove('active');
+            }
+        });
+        scrollTableOfContents();
+        collapseTableOfContents();
+    });
+    
+    document.querySelectorAll('section[id]').forEach((section) => {
+        observer.observe(section);
+    });
+
+    document.getElementsByTagName("main")[0].onclick = (evt) => {
+        
+        const toc = document.getElementById("toc-box-float");
+        const toc_rect = toc.getBoundingClientRect();
+        const target_id = evt.target.getAttribute('id');
+        if (target_id != "toc-toggle" &&
+            target_id != "toc-toggle-icon" &&
+            !(evt.x > toc_rect.left && evt.x < toc_rect.right && evt.y > toc_rect.top && evt.y < toc_rect.bottom)) {
+            toc.classList.add('sidebar-hidden');
+        }
+    };
+    document.getElementById("toc-toggle").onclick = (evt) => {
+        const toc = document.getElementById("toc-box-float");
+        toc.classList.toggle('sidebar-hidden');
+    };
+
+
+    document.body.addEventListener('keydown', function(e) {
+        if ("key" in e) {
+            var isEscape = (e.key === "Escape" || e.key === "Esc");
+        } else {
+            var isEscape = (e.keyCode === 27);
+        }
+        if (isEscape) {
+            for (let elem of document.getElementsByClassName("code-expanded")) {
+                elem.classList.remove("code-expanded")
+            }
+            const toc = document.getElementById("toc-box-float");
+            toc.classList.add('sidebar-hidden');
+        }
+    });
+
+    scrollTableOfContents();
+    collapseTableOfContents();
+});
+</script>
