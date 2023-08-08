@@ -60,7 +60,7 @@ window.addEventListener('DOMContentLoaded', () => {
         toc.scrollTop = targetY - (toc.offsetHeight/2);
     }
 
-    const observer = new IntersectionObserver(entries => {
+    const toc_entry_observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             const id = entry.target.getAttribute('id');
             if (entry.intersectionRatio > 0) {
@@ -75,8 +75,24 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     
     document.querySelectorAll('section[id]').forEach((section) => {
-        observer.observe(section);
+        toc_entry_observer.observe(section);
     });
+
+
+    const title_observer = new IntersectionObserver(entries => {
+        const toc_title = document.getElementById("toc-title")
+        entries.forEach(entry => {
+            if (entry.intersectionRatio > 0) {
+                toc_title.classList.add("toc-collapsed");
+            } else {
+                toc_title.classList.remove("toc-collapsed");
+            }
+        });
+    });
+    title_observer.observe(document.getElementById("title"));
+
+
+
 
     document.getElementsByTagName("main")[0].onclick = (evt) => {
         

@@ -38,6 +38,9 @@
         font-size: 1.3em;
     }
 
+    #toc-title {
+        display: none;
+    }
 
     @media only screen {
         main {
@@ -74,7 +77,19 @@
             padding-right: 1em;
             font-size: .8em;
         }
- 
+        #toc-title {
+            display: block;
+            padding: .5em .5em 0 .5em;
+            font-weight: bold;
+            overflow-y: clip;
+            max-height: 3em;
+            transition: max-height 0.3s ease-in;
+        }
+        #toc-title a {
+            color: #000000;
+            text-decoration: none;
+        }
+
         .code-expanded .highlight {
             position: fixed;
             z-index: 800;
@@ -112,7 +127,6 @@
         display: none;
     }
 
-
     @media only screen and (max-width: 900px) {
         main {
             display: block;
@@ -124,6 +138,7 @@
             box-shadow: 0em 0.2em 1em #AAAAAA;
             border-radius: 0 3px 3px 0;
         }
+
 
         #toc-box-float {
             position: fixed;

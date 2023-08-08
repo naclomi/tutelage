@@ -4,10 +4,12 @@
     <body>
         <main>
             {{- partial "header.html" . -}}
-            <div id="title"><h1>{{- page.Title -}}</h1></div>
+            <div id="title"><a id="tip-tip-top"><h1>{{- page.Title -}}</h1></a></div>
             <div id="toc-box-float" class="sidebar-peek">
                 <button id="toc-toggle" type="button"><i id="toc-toggle-icon" class="fa-solid fa-list"></i></button>
-                <div id="toc-box">{{ .TableOfContents }}</div>
+                <div id="toc-box">
+                <div id="toc-title" class="toc-collapsed"><a href="#tip-tip-top">{{- page.Title -}}</a></div>
+                {{ .TableOfContents }}</div>
             </div>
             <div id="content">
                 {{- block "main" . }}{{- end }}
