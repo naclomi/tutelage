@@ -110,6 +110,28 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    function reapPeekingSidebars() {
+        const to_be_hidden = document.getElementsByClassName("sidebar-peek");
+        if (to_be_hidden.length > 0) {
+            setTimeout(()=>{
+                for (elem of to_be_hidden) {
+                    elem.classList.remove("sidebar-peek");
+                    elem.classList.add("sidebar-hidden");
+                }
+            }, 800)
+
+        }
+    }
+    const sidebard_layout_mql = window.matchMedia("(max-width: 900px)");
+    sidebard_layout_mql.onchange = (e) => {
+      if (e.matches) {
+        reapPeekingSidebars();
+      }
+    };
+    if (sidebard_layout_mql.matches) {
+        reapPeekingSidebars();
+    }
+
     Fancybox.bind("[data-fancybox]", {
       // Your custom options
     });
@@ -118,3 +140,4 @@ window.addEventListener('DOMContentLoaded', () => {
     collapseTableOfContents();
 });
 </script>
+
