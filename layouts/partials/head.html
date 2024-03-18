@@ -14,6 +14,7 @@
         font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
         -webkit-font-smoothing: auto;
         line-height: 1.5;
+        margin: 2em;
     }
 
     .heading .heading-link {
@@ -34,7 +35,6 @@
 
     #title {
         margin-top: 6em;
-        margin-left: 5%;
         font-size: 1.3em;
     }
 
@@ -44,17 +44,15 @@
 
     @media only screen {
         main {
-          display: grid;
-          grid-template-columns: 15em 1fr;
-          margin: 0 auto 0 auto;
+            margin: 0 auto 0 auto;
         }
         img {
             max-width: 60vw;
         }
-        #content {
-            max-width: 70vw;
-        }
 
+        #content-row {
+            display: flex;
+        }
         #title {
             grid-column: span 2;
         }
@@ -62,7 +60,6 @@
         #toc-box-float {
             position: relative;
             height: auto;
-            grid-column-start: 1;
         }
         #toc-box {
             width: 15em;
@@ -119,7 +116,7 @@
         }
 
         .highlight>:first-child {
-            width: 60vw;
+/*            max-width: 60vw;*/
         }
 
     }
@@ -130,6 +127,7 @@
     @media only screen and (max-width: 900px) {
         main {
             display: block;
+            margin-left: 1em;
         }
         img {
             max-width: 80vw;
@@ -137,8 +135,9 @@
         #toc-box {
             box-shadow: 0em 0.2em 1em #AAAAAA;
             border-radius: 0 3px 3px 0;
+            padding: 1em;
+            height: 85vh;
         }
-
 
         #toc-box-float {
             position: fixed;
@@ -150,16 +149,8 @@
         }
 
         .sidebar-hidden {
-            left: -13em !important;
+            left: -14em !important;
             transition: left 0.5s;
-        }
-
-        #title {
-            margin-left: 2.5em;
-        }
-        #content {
-            margin-left: 2.5em;
-            max-width: 90vw;
         }
 
         #toc-toggle {
@@ -186,7 +177,7 @@
             transition: top 0.5s;
         }
         .highlight>:first-child {
-            width: 80vw;
+/*            width: 80vw;*/
         }
 
     }
@@ -226,7 +217,6 @@
     }
 
     img {
-        margin: 0 2em 0 2em;
         box-shadow: 0em .2em 1em #AAAAAA;
         border-radius: 3px;
     }
@@ -237,6 +227,7 @@
 
     .codeblock {
         display: flex;
+        width: 500px;
     }
 
 
@@ -292,6 +283,7 @@
     .highlight {
         margin-left: 1em;
         font-size: 1.2em;
+        width: 100%;
     }
     .highlight>:first-child {
         padding: 1em;
@@ -321,9 +313,10 @@
     }
 
 
-    .aside {
+    aside, .aside {
         background-color: #EEEEEE;
         padding: 1em;
         border-radius: .5em;
+        width: 85%;
     }
 </style>
