@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
         section.dataset.level = heading.getAttribute('aria-level');
         heading.removeAttribute('id');
         document.querySelector(`nav li a[href="#${section.getAttribute('id')}"]`).parentElement.dataset.targetLevel = section.dataset.level;
-        while (cursor != null && !(cursor.nodeType == 1 && cursor.getAttribute('id') == heading.dataset.ending)){
+        while (cursor != null && !(cursor.nodeType == 1 && cursor.getAttribute('id') != null && cursor.getAttribute('id') == heading.dataset.ending)){
             let next_cursor = cursor.nextSibling;
             section.appendChild(cursor);
             cursor = next_cursor;
